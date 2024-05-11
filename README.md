@@ -1,10 +1,10 @@
-# Embedded-Systems-Interrfacing-Using-Atmega32-Proteus
+## Embedded-Systems-Interrfacing-Using-Atmega32-Proteus
 
 
 ### Exercises
 * ✅ 1 : Digital Input & Digital Output 
 * ✅ 2 : Interrupts
-
+* ✅ 3 : LCD Driver
 
 
 
