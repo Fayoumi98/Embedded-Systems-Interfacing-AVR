@@ -1,0 +1,300 @@
+
+Section_4_7_Segment.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001b2  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000206  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000206  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000238  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000048  00000000  00000000  00000274  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000074e  00000000  00000000  000002bc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000647  00000000  00000000  00000a0a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000454  00000000  00000000  00001051  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000058  00000000  00000000  000014a8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000038a  00000000  00000000  00001500  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000025e  00000000  00000000  0000188a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000028  00000000  00000000  00001ae8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 d7 00 	jmp	0x1ae	; 0x1ae <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+#include "headers/seven_segment.h"
+
+int main(void)
+{
+	// initialize 7 segment
+	seven_segment_init();
+  6c:	0e 94 43 00 	call	0x86	; 0x86 <seven_segment_init>
+	
+	uint8_t i = 0;
+  70:	d0 e0       	ldi	r29, 0x00	; 0
+    while (1) 
+    {
+		
+		for(uint8_t c = 0 ; c < 5 ; c++)
+  72:	c0 e0       	ldi	r28, 0x00	; 0
+  74:	04 c0       	rjmp	.+8      	; 0x7e <main+0x12>
+		{
+			seven_segment_write(i);
+  76:	8d 2f       	mov	r24, r29
+  78:	0e 94 4d 00 	call	0x9a	; 0x9a <seven_segment_write>
+	
+	uint8_t i = 0;
+    while (1) 
+    {
+		
+		for(uint8_t c = 0 ; c < 5 ; c++)
+  7c:	cf 5f       	subi	r28, 0xFF	; 255
+  7e:	c5 30       	cpi	r28, 0x05	; 5
+  80:	d0 f3       	brcs	.-12     	; 0x76 <main+0xa>
+		{
+			seven_segment_write(i);
+		}
+		i++;
+  82:	df 5f       	subi	r29, 0xFF	; 255
+    }
+  84:	f6 cf       	rjmp	.-20     	; 0x72 <main+0x6>
+
+00000086 <seven_segment_init>:
+#include "headers//seven_segment.h"
+
+
+void seven_segment_init(void)
+{
+	INIT_SEVEN_SEGMENT();
+  86:	84 b3       	in	r24, 0x14	; 20
+  88:	8f 63       	ori	r24, 0x3F	; 63
+  8a:	84 bb       	out	0x14, r24	; 20
+	
+	SEG_E1(1);
+  8c:	85 b3       	in	r24, 0x15	; 21
+  8e:	80 61       	ori	r24, 0x10	; 16
+  90:	85 bb       	out	0x15, r24	; 21
+	SEG_E2(1);
+  92:	85 b3       	in	r24, 0x15	; 21
+  94:	80 62       	ori	r24, 0x20	; 32
+  96:	85 bb       	out	0x15, r24	; 21
+  98:	08 95       	ret
+
+0000009a <seven_segment_write>:
+
+
+void seven_segment_write(uint8_t data)
+{
+	uint8_t first_digit;
+	first_digit = data % 10;
+  9a:	9d ec       	ldi	r25, 0xCD	; 205
+  9c:	89 9f       	mul	r24, r25
+  9e:	91 2d       	mov	r25, r1
+  a0:	11 24       	eor	r1, r1
+  a2:	96 95       	lsr	r25
+  a4:	96 95       	lsr	r25
+  a6:	96 95       	lsr	r25
+  a8:	99 0f       	add	r25, r25
+  aa:	29 2f       	mov	r18, r25
+  ac:	22 0f       	add	r18, r18
+  ae:	22 0f       	add	r18, r18
+  b0:	92 0f       	add	r25, r18
+  b2:	28 2f       	mov	r18, r24
+  b4:	29 1b       	sub	r18, r25
+  b6:	92 2f       	mov	r25, r18
+	SEG_E1(1);
+  b8:	25 b3       	in	r18, 0x15	; 21
+  ba:	20 61       	ori	r18, 0x10	; 16
+  bc:	25 bb       	out	0x15, r18	; 21
+	SEG_E2(0);
+  be:	25 b3       	in	r18, 0x15	; 21
+  c0:	2f 7d       	andi	r18, 0xDF	; 223
+  c2:	25 bb       	out	0x15, r18	; 21
+	SEG_A(READBIT(first_digit,0));
+  c4:	90 fd       	sbrc	r25, 0
+  c6:	04 c0       	rjmp	.+8      	; 0xd0 <seven_segment_write+0x36>
+  c8:	25 b3       	in	r18, 0x15	; 21
+  ca:	2e 7f       	andi	r18, 0xFE	; 254
+  cc:	25 bb       	out	0x15, r18	; 21
+  ce:	03 c0       	rjmp	.+6      	; 0xd6 <seven_segment_write+0x3c>
+  d0:	25 b3       	in	r18, 0x15	; 21
+  d2:	21 60       	ori	r18, 0x01	; 1
+  d4:	25 bb       	out	0x15, r18	; 21
+	SEG_B(READBIT(first_digit,1));
+  d6:	91 fd       	sbrc	r25, 1
+  d8:	04 c0       	rjmp	.+8      	; 0xe2 <seven_segment_write+0x48>
+  da:	25 b3       	in	r18, 0x15	; 21
+  dc:	2d 7f       	andi	r18, 0xFD	; 253
+  de:	25 bb       	out	0x15, r18	; 21
+  e0:	03 c0       	rjmp	.+6      	; 0xe8 <seven_segment_write+0x4e>
+  e2:	25 b3       	in	r18, 0x15	; 21
+  e4:	22 60       	ori	r18, 0x02	; 2
+  e6:	25 bb       	out	0x15, r18	; 21
+	SEG_C(READBIT(first_digit,2));
+  e8:	92 fd       	sbrc	r25, 2
+  ea:	04 c0       	rjmp	.+8      	; 0xf4 <seven_segment_write+0x5a>
+  ec:	25 b3       	in	r18, 0x15	; 21
+  ee:	2b 7f       	andi	r18, 0xFB	; 251
+  f0:	25 bb       	out	0x15, r18	; 21
+  f2:	03 c0       	rjmp	.+6      	; 0xfa <seven_segment_write+0x60>
+  f4:	25 b3       	in	r18, 0x15	; 21
+  f6:	24 60       	ori	r18, 0x04	; 4
+  f8:	25 bb       	out	0x15, r18	; 21
+	SEG_D(READBIT(first_digit,3));
+  fa:	93 fd       	sbrc	r25, 3
+  fc:	04 c0       	rjmp	.+8      	; 0x106 <seven_segment_write+0x6c>
+  fe:	95 b3       	in	r25, 0x15	; 21
+ 100:	97 7f       	andi	r25, 0xF7	; 247
+ 102:	95 bb       	out	0x15, r25	; 21
+ 104:	03 c0       	rjmp	.+6      	; 0x10c <seven_segment_write+0x72>
+ 106:	95 b3       	in	r25, 0x15	; 21
+ 108:	98 60       	ori	r25, 0x08	; 8
+ 10a:	95 bb       	out	0x15, r25	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 10c:	3f ef       	ldi	r19, 0xFF	; 255
+ 10e:	90 e7       	ldi	r25, 0x70	; 112
+ 110:	22 e0       	ldi	r18, 0x02	; 2
+ 112:	31 50       	subi	r19, 0x01	; 1
+ 114:	90 40       	sbci	r25, 0x00	; 0
+ 116:	20 40       	sbci	r18, 0x00	; 0
+ 118:	e1 f7       	brne	.-8      	; 0x112 <seven_segment_write+0x78>
+ 11a:	00 c0       	rjmp	.+0      	; 0x11c <seven_segment_write+0x82>
+ 11c:	00 00       	nop
+	
+	_delay_ms(100);
+	
+	uint8_t second_digit = (data / 10) % 10 ;
+ 11e:	9d ec       	ldi	r25, 0xCD	; 205
+ 120:	89 9f       	mul	r24, r25
+ 122:	81 2d       	mov	r24, r1
+ 124:	11 24       	eor	r1, r1
+ 126:	86 95       	lsr	r24
+ 128:	86 95       	lsr	r24
+ 12a:	86 95       	lsr	r24
+ 12c:	89 9f       	mul	r24, r25
+ 12e:	91 2d       	mov	r25, r1
+ 130:	11 24       	eor	r1, r1
+ 132:	96 95       	lsr	r25
+ 134:	96 95       	lsr	r25
+ 136:	96 95       	lsr	r25
+ 138:	99 0f       	add	r25, r25
+ 13a:	29 2f       	mov	r18, r25
+ 13c:	22 0f       	add	r18, r18
+ 13e:	22 0f       	add	r18, r18
+ 140:	92 0f       	add	r25, r18
+ 142:	89 1b       	sub	r24, r25
+ 144:	98 2f       	mov	r25, r24
+	SEG_E1(0);
+ 146:	85 b3       	in	r24, 0x15	; 21
+ 148:	8f 7e       	andi	r24, 0xEF	; 239
+ 14a:	85 bb       	out	0x15, r24	; 21
+	SEG_E2(1);
+ 14c:	85 b3       	in	r24, 0x15	; 21
+ 14e:	80 62       	ori	r24, 0x20	; 32
+ 150:	85 bb       	out	0x15, r24	; 21
+	SEG_A(READBIT(second_digit,0));
+ 152:	90 fd       	sbrc	r25, 0
+ 154:	04 c0       	rjmp	.+8      	; 0x15e <seven_segment_write+0xc4>
+ 156:	85 b3       	in	r24, 0x15	; 21
+ 158:	8e 7f       	andi	r24, 0xFE	; 254
+ 15a:	85 bb       	out	0x15, r24	; 21
+ 15c:	03 c0       	rjmp	.+6      	; 0x164 <seven_segment_write+0xca>
+ 15e:	85 b3       	in	r24, 0x15	; 21
+ 160:	81 60       	ori	r24, 0x01	; 1
+ 162:	85 bb       	out	0x15, r24	; 21
+	SEG_B(READBIT(second_digit,1));
+ 164:	91 fd       	sbrc	r25, 1
+ 166:	04 c0       	rjmp	.+8      	; 0x170 <seven_segment_write+0xd6>
+ 168:	85 b3       	in	r24, 0x15	; 21
+ 16a:	8d 7f       	andi	r24, 0xFD	; 253
+ 16c:	85 bb       	out	0x15, r24	; 21
+ 16e:	03 c0       	rjmp	.+6      	; 0x176 <seven_segment_write+0xdc>
+ 170:	85 b3       	in	r24, 0x15	; 21
+ 172:	82 60       	ori	r24, 0x02	; 2
+ 174:	85 bb       	out	0x15, r24	; 21
+	SEG_C(READBIT(second_digit,2));
+ 176:	92 fd       	sbrc	r25, 2
+ 178:	04 c0       	rjmp	.+8      	; 0x182 <seven_segment_write+0xe8>
+ 17a:	85 b3       	in	r24, 0x15	; 21
+ 17c:	8b 7f       	andi	r24, 0xFB	; 251
+ 17e:	85 bb       	out	0x15, r24	; 21
+ 180:	03 c0       	rjmp	.+6      	; 0x188 <seven_segment_write+0xee>
+ 182:	85 b3       	in	r24, 0x15	; 21
+ 184:	84 60       	ori	r24, 0x04	; 4
+ 186:	85 bb       	out	0x15, r24	; 21
+	SEG_D(READBIT(second_digit,3));
+ 188:	93 fd       	sbrc	r25, 3
+ 18a:	04 c0       	rjmp	.+8      	; 0x194 <seven_segment_write+0xfa>
+ 18c:	85 b3       	in	r24, 0x15	; 21
+ 18e:	87 7f       	andi	r24, 0xF7	; 247
+ 190:	85 bb       	out	0x15, r24	; 21
+ 192:	03 c0       	rjmp	.+6      	; 0x19a <seven_segment_write+0x100>
+ 194:	85 b3       	in	r24, 0x15	; 21
+ 196:	88 60       	ori	r24, 0x08	; 8
+ 198:	85 bb       	out	0x15, r24	; 21
+ 19a:	3f ef       	ldi	r19, 0xFF	; 255
+ 19c:	80 e7       	ldi	r24, 0x70	; 112
+ 19e:	92 e0       	ldi	r25, 0x02	; 2
+ 1a0:	31 50       	subi	r19, 0x01	; 1
+ 1a2:	80 40       	sbci	r24, 0x00	; 0
+ 1a4:	90 40       	sbci	r25, 0x00	; 0
+ 1a6:	e1 f7       	brne	.-8      	; 0x1a0 <seven_segment_write+0x106>
+ 1a8:	00 c0       	rjmp	.+0      	; 0x1aa <seven_segment_write+0x110>
+ 1aa:	00 00       	nop
+ 1ac:	08 95       	ret
+
+000001ae <_exit>:
+ 1ae:	f8 94       	cli
+
+000001b0 <__stop_program>:
+ 1b0:	ff cf       	rjmp	.-2      	; 0x1b0 <__stop_program>
