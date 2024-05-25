@@ -7,6 +7,9 @@
 * ✅ 3 : LCD Driver & EEPROM
 * ✅ 4 : Keypad & 7 Segment
 * ✅ 5 : Timers
+* ✅ 6 : Analog to Digital Converter & Pulse Width Modulation & Watch Dog Timer
+* ✅ 7 : SPI & USART
+
 
 
 
