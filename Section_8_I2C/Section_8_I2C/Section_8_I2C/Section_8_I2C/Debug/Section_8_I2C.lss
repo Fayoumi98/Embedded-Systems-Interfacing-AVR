@@ -1,0 +1,214 @@
+
+Section_8_I2C.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000ee  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000142  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000142  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000174  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000078  00000000  00000000  000001b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000007fa  00000000  00000000  00000228  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000067b  00000000  00000000  00000a22  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000044f  00000000  00000000  0000109d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000b8  00000000  00000000  000014ec  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003c7  00000000  00000000  000015a4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000099  00000000  00000000  0000196b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000058  00000000  00000000  00001a04  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 5a 00 	call	0xb4	; 0xb4 <main>
+  64:	0c 94 75 00 	jmp	0xea	; 0xea <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <I2C_master_init>:
+
+void I2C_master_init(void)
+{	
+	//TWI Bit Rate Register – TWBR
+	// form formula set clock frequency
+	TWBR = 12;
+  6c:	8c e0       	ldi	r24, 0x0C	; 12
+  6e:	80 b9       	out	0x00, r24	; 0
+  70:	08 95       	ret
+
+00000072 <I2C_master_start>:
+		In TWI Control Register – TWCR:
+			- Set TWEN : TWI Enable Bit
+			- Set TWINT : TWI Interrupt Flag (to reset it to 0)
+			- Set TWSTA : TWI START Condition Bit to be sent
+	*/
+	TWCR = (1 << TWSTA) | (1 << TWINT) | (1 << TWEN) ;
+  72:	84 ea       	ldi	r24, 0xA4	; 164
+  74:	86 bf       	out	0x36, r24	; 54
+	
+	// Wait until Start condition is sent
+	while(READBIT(TWCR,TWINT) == 0);
+  76:	06 b6       	in	r0, 0x36	; 54
+  78:	07 fe       	sbrs	r0, 7
+  7a:	fd cf       	rjmp	.-6      	; 0x76 <I2C_master_start+0x4>
+}
+  7c:	08 95       	ret
+
+0000007e <I2C_master_addr>:
+		TWI Data Register – TWDR
+			- write id (address) on bit 1-7
+			- if read write R_W =  1 on TWDR bit 0 else if read R_W =  0 on TWDR bit 0
+			
+	*/
+	TWDR = (ID << 1);
+  7e:	88 0f       	add	r24, r24
+  80:	83 b9       	out	0x03, r24	; 3
+	R_W == 1 ? SETBIT(TWDR,0):CLRBIT(TWDR,0);
+  82:	61 30       	cpi	r22, 0x01	; 1
+  84:	21 f4       	brne	.+8      	; 0x8e <I2C_master_addr+0x10>
+  86:	83 b1       	in	r24, 0x03	; 3
+  88:	81 60       	ori	r24, 0x01	; 1
+  8a:	83 b9       	out	0x03, r24	; 3
+  8c:	03 c0       	rjmp	.+6      	; 0x94 <I2C_master_addr+0x16>
+  8e:	83 b1       	in	r24, 0x03	; 3
+  90:	8e 7f       	andi	r24, 0xFE	; 254
+  92:	83 b9       	out	0x03, r24	; 3
+	
+	// Wait until Address is sent
+	TWCR = (1 << TWINT) | (1 << TWEN) ;
+  94:	84 e8       	ldi	r24, 0x84	; 132
+  96:	86 bf       	out	0x36, r24	; 54
+	while(READBIT(TWCR,TWINT) == 0);
+  98:	06 b6       	in	r0, 0x36	; 54
+  9a:	07 fe       	sbrs	r0, 7
+  9c:	fd cf       	rjmp	.-6      	; 0x98 <I2C_master_addr+0x1a>
+}
+  9e:	08 95       	ret
+
+000000a0 <I2C_master_write>:
+{
+	/*
+		TWI Data Register – TWDR
+			- write data on bit 0-7
+			*/
+	TWDR = data;
+  a0:	83 b9       	out	0x03, r24	; 3
+	
+	// Wait until data is sent
+	TWCR = (1 << TWINT) | (1 << TWEN) ;
+  a2:	84 e8       	ldi	r24, 0x84	; 132
+  a4:	86 bf       	out	0x36, r24	; 54
+	while(READBIT(TWCR,TWINT) == 0);
+  a6:	06 b6       	in	r0, 0x36	; 54
+  a8:	07 fe       	sbrs	r0, 7
+  aa:	fd cf       	rjmp	.-6      	; 0xa6 <I2C_master_write+0x6>
+}
+  ac:	08 95       	ret
+
+000000ae <I2C_master_stop>:
+		In TWI Control Register – TWCR:
+			- Set TWEN : TWI Enable Bit
+			- Set TWINT : TWI Interrupt Flag (to reset it to 0)
+			- Set TWSTO : TWI Stop Condition Bit to be sent
+	*/
+	TWCR = (1 << TWSTO) | (1 << TWINT) | (1 << TWEN) ;
+  ae:	84 e9       	ldi	r24, 0x94	; 148
+  b0:	86 bf       	out	0x36, r24	; 54
+  b2:	08 95       	ret
+
+000000b4 <main>:
+#include "headers/headers.h"
+#include "headers/I2C.h"
+
+int main(void)
+{
+	I2C_master_init();
+  b4:	0e 94 36 00 	call	0x6c	; 0x6c <I2C_master_init>
+	uint8_t i = 0;
+  b8:	c0 e0       	ldi	r28, 0x00	; 0
+	
+    while (1) 
+    {
+		I2C_master_start();
+  ba:	0e 94 39 00 	call	0x72	; 0x72 <I2C_master_start>
+		I2C_master_addr(15,0);
+  be:	60 e0       	ldi	r22, 0x00	; 0
+  c0:	8f e0       	ldi	r24, 0x0F	; 15
+  c2:	0e 94 3f 00 	call	0x7e	; 0x7e <I2C_master_addr>
+		I2C_master_write(i++);
+  c6:	d1 e0       	ldi	r29, 0x01	; 1
+  c8:	dc 0f       	add	r29, r28
+  ca:	8c 2f       	mov	r24, r28
+  cc:	0e 94 50 00 	call	0xa0	; 0xa0 <I2C_master_write>
+		I2C_master_stop();
+  d0:	0e 94 57 00 	call	0xae	; 0xae <I2C_master_stop>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  d4:	2f ef       	ldi	r18, 0xFF	; 255
+  d6:	80 e7       	ldi	r24, 0x70	; 112
+  d8:	92 e0       	ldi	r25, 0x02	; 2
+  da:	21 50       	subi	r18, 0x01	; 1
+  dc:	80 40       	sbci	r24, 0x00	; 0
+  de:	90 40       	sbci	r25, 0x00	; 0
+  e0:	e1 f7       	brne	.-8      	; 0xda <main+0x26>
+  e2:	00 c0       	rjmp	.+0      	; 0xe4 <main+0x30>
+  e4:	00 00       	nop
+	
+    while (1) 
+    {
+		I2C_master_start();
+		I2C_master_addr(15,0);
+		I2C_master_write(i++);
+  e6:	cd 2f       	mov	r28, r29
+  e8:	e8 cf       	rjmp	.-48     	; 0xba <main+0x6>
+
+000000ea <_exit>:
+  ea:	f8 94       	cli
+
+000000ec <__stop_program>:
+  ec:	ff cf       	rjmp	.-2      	; 0xec <__stop_program>
