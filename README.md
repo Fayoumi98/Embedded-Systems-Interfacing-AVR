@@ -9,7 +9,7 @@
 * ✅ 5 : Timers
 * ✅ 6 : Analog to Digital Converter & Pulse Width Modulation & Watch Dog Timer
 * ✅ 7 : SPI & USART
-
+* ✅ 8 : I2C
 
 
 
